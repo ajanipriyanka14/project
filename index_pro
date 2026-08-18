@@ -1,0 +1,262 @@
+<!-- ================= PRODUCTS START ================= -->
+
+
+
+<section class="py-5" style="background:#000 !important;">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <h5 style="color:#E88F2A; font-weight:bold;">
+                OUR PRODUCTS
+            </h5>
+
+          <h1 class="fw-bold" style="color:#fff; text-shadow:0 0 10px rgba(232,143,42,0.5);">
+    Our Delicious Cakes
+</h1>
+
+            <p class="text-muted">
+                Freshly baked cakes made with love.
+            </p>
+
+        </div>
+	
+</form>
+
+</div>
+
+    </form>
+
+</div>
+
+
+        <div class="row g-4">
+
+            <?php
+
+            $product_query = mysqli_query(
+                $conn,
+                "SELECT * FROM cake
+                 WHERE stock > 0
+                 AND status = 'Available'
+                 ORDER BY id DESC
+                 LIMIT 8"
+            );
+
+
+            if (!$product_query) {
+
+                echo "<div class='col-12 text-center'>
+                        <p class='text-danger'>
+                            " . mysqli_error($conn) . "
+                        </p>
+                      </div>";
+
+            }
+
+            elseif (mysqli_num_rows($product_query) > 0) {
+
+                while ($product = mysqli_fetch_assoc($product_query)) {
+				
+
+$cake_name = $product['cake_name'];
+
+$feedback_query = mysqli_query(
+    $conn,
+    "SELECT 
+        AVG(rating) AS avg_rating,
+        COUNT(*) AS total_reviews
+     FROM feedback
+     WHERE cake_name = '" . mysqli_real_escape_string($conn, $cake_name) . "'"
+);
+
+$feedback_data = mysqli_fetch_assoc($feedback_query);
+
+$avg_rating = $feedback_data['avg_rating']
+              ? round($feedback_data['avg_rating'], 1)
+              : 0;
+
+$total_reviews = $feedback_data['total_reviews'] ?? 0;
+
+?>
+					
+					
+           
+                    <div class="col-lg-3 col-md-6">
+
+                       <div class="product-card h-100">
+
+                            <!-- IMAGE -->
+
+                            <img
+                                src="img/<?php echo htmlspecialchars($product['image']); ?>"
+                                class="card-img-top"
+                                alt="<?php echo htmlspecialchars($product['cake_name']); ?>"
+                                style="height:230px; object-fit:cover;"
+                            >
+
+
+                            <div class="card-body text-center">
+
+                                <!-- NAME -->
+
+                                <h5 class="fw-bold">
+
+                                    <?php
+                                    echo htmlspecialchars($product['cake_name']);
+                                    ?>
+
+                                </h5>
+
+
+                                <!-- CATEGORY -->
+
+                                <p class="text-muted mb-1">
+
+                                    <?php
+                                    echo htmlspecialchars($product['category']);
+                                    ?>
+
+                                </p>
+
+
+                                <!-- FLAVOUR -->
+
+                                <p class="mb-1">
+
+                                    <strong>Flavour:</strong>
+
+                                    <?php
+                                    echo htmlspecialchars($product['flavour']);
+                                    ?>
+
+                                </p>
+
+
+                                <!-- WEIGHT -->
+
+                                <p class="mb-2">
+
+                                    <strong>Weight:</strong>
+
+                                    <?php
+                                    echo htmlspecialchars($product['weight']);
+                                    ?>
+
+                                </p>
+
+
+                                <!-- PRICE -->
+
+                                <h5 style="color:#E88F2A; font-weight:bold;">
+
+                                    ₹<?php
+                                    echo number_format($product['price'], 2);
+                                    ?>
+
+                                </h5>
+
+											<!-- RATING & REVIEWS -->
+
+<div class="product-rating">
+
+    <?php for ($i = 1; $i <= 5; $i++) { ?>
+
+        <?php if ($i <= round($avg_rating)) { ?>
+
+            <span class="star">★</span>
+
+        <?php } else { ?>
+
+            <span class="star empty">★</span>
+
+        <?php } ?>
+
+    <?php } ?>
+
+    <?php if ($total_reviews > 0) { ?>
+
+        <span class="rating-number">
+            <?php echo $avg_rating; ?>
+        </span>
+
+        <span class="review-count">
+            (<?php echo $total_reviews; ?> Reviews)
+        </span>
+
+    <?php } else { ?>
+
+        <span class="review-count">
+            No Reviews
+        </span>
+
+    <?php } ?>
+
+</div>
+
+                                <!-- BUTTON -->
+
+                                <a 
+										href="product.php?id=<?php echo $product['id']; ?>" 
+										class="view-product-btn"
+									>
+									
+											View Product
+														
+								</a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+            <?php
+
+                }
+
+            }
+
+            else {
+
+            ?>
+
+                <div class="col-12 text-center">
+
+                    <h5>No Cakes Available</h5>
+
+                    <p class="text-muted">
+                        Please check back later.
+                    </p>
+
+                </div>
+
+            <?php
+
+            }
+
+            ?>
+
+        </div>
+
+
+        <!-- VIEW ALL -->
+
+        <div class="text-center mt-5">
+
+            
+     <a
+				href="product.php"
+				class="view-product-btn"
+		>
+					
+    VIEW ALL CAKES
+</a>
+
+        </div>
+
+    </div>
+
+</section>
