@@ -1,0 +1,411 @@
+<!-- ================= PRODUCTS START ================= -->
+
+<section class="py-5" style="background:#000;">
+
+    <div class="container">
+
+        <!-- ================= TITLE ================= -->
+
+        <div class="text-center mb-4">
+
+            <h5 style="color:#E88F2A; font-weight:bold;">
+                OUR PRODUCTS
+            </h5>
+
+            <h1 class="fw-bold" style="color:#fff;">
+                Our Delicious Cakes
+            </h1>
+
+            <p style="color:#aaa;">
+                Freshly baked cakes made with love.
+            </p>
+
+        </div>
+
+
+        <!-- ================= SEARCH BAR ================= -->
+
+        <div class="cake-search mb-5">
+
+            <form method="GET" action="index1.php">
+
+                <div class="search-wrapper">
+
+                    <i class="fa fa-search search-icon"></i>
+
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Search cakes..."
+                        value="<?php
+                            echo isset($_GET['search'])
+                                ? htmlspecialchars($_GET['search'])
+                                : '';
+                        ?>"
+                    >
+
+                    <button type="submit">
+                        Search
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= PRODUCTS ================= -->
+
+        <div class="row g-4">
+
+        <?php
+
+        /* ================= SEARCH VALUE ================= */
+
+        $search = "";
+
+        if (isset($_GET['search'])) {
+            $search = trim($_GET['search']);
+        }
+
+        $search_safe = mysqli_real_escape_string($conn, $search);
+
+
+        /* ================= PRODUCT QUERY ================= */
+
+        if ($search != "") {
+
+            $product_query = mysqli_query(
+                $conn,
+                "SELECT * FROM cake
+                 WHERE stock > 0
+                 AND status = 'Available'
+                 AND (
+                     cake_name LIKE '%$search_safe%'
+                     OR category LIKE '%$search_safe%'
+                     OR flavour LIKE '%$search_safe%'
+                 )
+                 ORDER BY id DESC"
+            );
+
+        } else {
+
+            $product_query = mysqli_query(
+                $conn,
+                "SELECT * FROM cake
+                 WHERE stock > 0
+                 AND status = 'Available'
+                 ORDER BY id DESC
+                 LIMIT 8"
+            );
+        }
+
+
+        /* ================= DATABASE ERROR ================= */
+
+        if (!$product_query) {
+
+            echo '
+            <div class="col-12 text-center">
+                <p style="color:red;">
+                    Database Error: '
+                    . htmlspecialchars(mysqli_error($conn)) .
+                '</p>
+            </div>';
+
+        }
+
+
+        /* ================= PRODUCTS FOUND ================= */
+
+        elseif (mysqli_num_rows($product_query) > 0) {
+
+            while ($product = mysqli_fetch_assoc($product_query)) {
+
+
+                /* ================= CAKE NAME ================= */
+
+                $cake_name = $product['cake_name'];
+
+                $cake_name_safe =
+                    mysqli_real_escape_string($conn, $cake_name);
+
+
+                /* ================= FEEDBACK ================= */
+
+                $feedback_query = mysqli_query(
+                    $conn,
+                    "SELECT
+                        AVG(rating) AS avg_rating,
+                        COUNT(*) AS total_reviews
+                     FROM feedback
+                     WHERE cake_name='$cake_name_safe'"
+                );
+
+
+                $avg_rating = 0;
+                $total_reviews = 0;
+
+
+                if ($feedback_query) {
+
+                    $feedback_data =
+                        mysqli_fetch_assoc($feedback_query);
+
+                    if (
+                        $feedback_data &&
+                        $feedback_data['avg_rating'] !== null
+                    ) {
+
+                        $avg_rating =
+                            round(
+                                $feedback_data['avg_rating'],
+                                1
+                            );
+                    }
+
+                    if ($feedback_data) {
+
+                        $total_reviews =
+                            (int)$feedback_data['total_reviews'];
+                    }
+                }
+
+        ?>
+
+
+                <!-- ================= PRODUCT CARD ================= -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="product-card">
+
+
+                        <!-- IMAGE -->
+
+                        <img
+                            src="img/<?php
+                                echo htmlspecialchars(
+                                    $product['image']
+                                );
+                            ?>"
+                            alt="<?php
+                                echo htmlspecialchars(
+                                    $product['cake_name']
+                                );
+                            ?>"
+                        >
+
+
+                        <!-- BODY -->
+
+                        <div class="product-body">
+
+
+                            <!-- NAME -->
+
+                            <h5>
+                                <?php
+                                echo htmlspecialchars(
+                                    $product['cake_name']
+                                );
+                                ?>
+                            </h5>
+
+
+                            <!-- CATEGORY -->
+
+                            <p class="category">
+                                <?php
+                                echo htmlspecialchars(
+                                    $product['category']
+                                );
+                                ?>
+                            </p>
+
+
+                            <!-- FLAVOUR -->
+
+                            <p>
+                                <strong>Flavour:</strong>
+                                <?php
+                                echo htmlspecialchars(
+                                    $product['flavour']
+                                );
+                                ?>
+                            </p>
+
+
+                            <!-- WEIGHT -->
+
+                            <p>
+                                <strong>Weight:</strong>
+                                <?php
+                                echo htmlspecialchars(
+                                    $product['weight']
+                                );
+                                ?>
+                            </p>
+
+
+                            <!-- PRICE -->
+
+                            <div class="price">
+
+                                ₹<?php
+                                echo number_format(
+                                    $product['price'],
+                                    2
+                                );
+                                ?>
+
+                            </div>
+
+
+                            <!-- ================= RATING ================= -->
+
+                            <div class="rating">
+
+                                <?php
+
+                                $rounded_rating =
+                                    round($avg_rating);
+
+                                for (
+                                    $i = 1;
+                                    $i <= 5;
+                                    $i++
+                                ) {
+
+                                    if (
+                                        $i <=
+                                        $rounded_rating
+                                    ) {
+
+                                        echo '<span class="star">★</span>';
+
+                                    } else {
+
+                                        echo '<span class="star empty">★</span>';
+                                    }
+                                }
+
+                                ?>
+
+
+                                <?php if ($total_reviews > 0) { ?>
+
+                                    <span class="rating-number">
+
+                                        <?php
+                                        echo $avg_rating;
+                                        ?>
+
+                                    </span>
+
+                                    <span class="reviews">
+
+                                        (
+                                        <?php
+                                        echo $total_reviews;
+                                        ?>
+                                        Reviews)
+
+                                    </span>
+
+                                <?php } else { ?>
+
+                                    <span class="reviews">
+                                        No Reviews
+                                    </span>
+
+                                <?php } ?>
+
+                            </div>
+
+
+                            <!-- ================= BUTTON ================= -->
+
+                            <a
+                                href="product.php?id=<?php
+                                    echo $product['id'];
+                                ?>"
+                                class="view-product-btn"
+                            >
+                                View Product
+                            </a>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+        <?php
+
+            }
+
+        }
+
+
+        /* ================= NO PRODUCTS ================= */
+
+        else {
+
+        ?>
+
+            <div class="col-12 text-center">
+
+                <div class="no-product">
+
+                    <i class="fa fa-search"></i>
+
+                    <h4>No Cakes Found</h4>
+
+                    <p>
+                        No cake found for
+                        "<?php
+                        echo htmlspecialchars($search);
+                        ?>"
+                    </p>
+
+                </div>
+
+            </div>
+
+        <?php
+
+        }
+
+        ?>
+
+        </div>
+
+
+        <!-- ================= VIEW ALL ================= -->
+
+        <?php if ($search == "") { ?>
+
+            <div class="text-center mt-5">
+
+                <a
+                    href="product.php"
+                    class="view-all-btn"
+                >
+                    View All Cakes
+                </a>
+
+            </div>
+
+        <?php } ?>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= PRODUCTS END ========
