@@ -1,0 +1,368 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    margin-top: 0 !important;
+    padding: 0 !important;
+}
+
+.navbar {
+    background: #fff !important;
+}
+
+.navbar .nav-link {
+    color: #222 !important;
+    font-weight: 600;
+}
+
+.navbar .nav-link:hover {
+    color: #E88F2A !important;
+}
+
+.btn-primary {
+    background: #E88F2A !important;
+    border-color: #E88F2A !important;
+    color: #fff !important;
+}
+
+.btn-primary:hover {
+    background: #d67d18 !important;
+    border-color: #d67d18 !important;
+}
+
+.cake-search {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.search-wrapper {
+    width: 650px;
+    max-width: 100%;
+    height: 58px;
+
+    background: #fff;
+
+    border: 2px solid #ddd;
+
+    border-radius: 30px;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 20px;
+
+    overflow: hidden;
+
+    transition: 0.3s;
+}
+
+.search-wrapper:focus-within {
+    border-color: #E88F2A;
+
+    box-shadow:
+        0 0 15px rgba(232,143,42,0.35);
+}
+
+.search-icon {
+    color: #777;
+    font-size: 19px;
+    margin-right: 12px;
+}
+
+.search-wrapper input {
+    flex: 1;
+
+    height: 100%;
+
+    border: none;
+
+    outline: none;
+
+    font-size: 17px;
+
+    color: #222;
+
+    background: transparent;
+}
+
+.search-wrapper input::placeholder {
+    color: #888;
+}
+
+.search-wrapper button {
+    height: 100%;
+
+    border: none;
+
+    background: #E88F2A;
+
+    color: #fff;
+
+    padding: 0 28px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.search-wrapper button:hover {
+    background: #d67d18;
+}
+
+
+/* ================= PRODUCT CARD ================= */
+
+.product-card {
+
+    background: #111;
+
+    border: 2px solid #333;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    height: 100%;
+
+    transition: 0.3s;
+}
+
+.product-card:hover {
+
+    border-color: #E88F2A;
+
+    box-shadow:
+        0 0 20px rgba(232,143,42,0.45);
+
+    transform: translateY(-5px);
+}
+
+
+.product-card img {
+
+    width: 100%;
+
+    height: 230px;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+.product-body {
+
+    padding: 20px;
+
+    text-align: center;
+
+    color: #fff;
+}
+
+
+.product-body h5 {
+
+    color: #fff;
+
+    font-weight: bold;
+
+    font-size: 19px;
+
+    margin-bottom: 7px;
+}
+
+
+.product-body .category {
+
+    color: #999;
+
+    margin-bottom: 12px;
+}
+
+
+.product-body p {
+
+    color: #ccc;
+
+    font-size: 14px;
+
+    margin-bottom: 7px;
+}
+
+
+.product-body strong {
+
+    color: #fff;
+}
+
+
+.price {
+
+    color: #E88F2A;
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+    margin: 12px 0;
+}
+
+
+/* ================= RATING ================= */
+
+.rating {
+
+    margin: 10px 0 16px;
+
+    white-space: nowrap;
+}
+
+.star {
+
+    color: #E88F2A;
+
+    font-size: 18px;
+}
+
+.star.empty {
+
+    color: #555;
+}
+
+.rating-number {
+
+    color: #fff;
+
+    font-weight: bold;
+
+    margin-left: 5px;
+}
+
+.reviews {
+
+    color: #999;
+
+    font-size: 13px;
+
+    margin-left: 3px;
+}
+
+
+/* ================= VIEW PRODUCT ================= */
+
+.view-product-btn {
+
+    display: inline-block;
+
+    background: #E88F2A;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    padding: 11px 25px;
+
+    border-radius: 30px;
+
+    transition: 0.3s;
+}
+
+.view-product-btn:hover {
+
+    background: #fff;
+
+    color: #000;
+
+    transform: translateY(-2px);
+}
+
+
+/* ================= VIEW ALL ================= */
+
+.view-all-btn {
+
+    display: inline-block;
+
+    background: #E88F2A;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    padding: 14px 40px;
+
+    border-radius: 30px;
+
+    transition: 0.3s;
+}
+
+.view-all-btn:hover {
+
+    background: #fff;
+
+    color: #000;
+}
+
+
+/* ================= NO PRODUCT ================= */
+
+.no-product {
+
+    padding: 50px;
+
+    color: #fff;
+}
+
+.no-product i {
+
+    font-size: 40px;
+
+    color: #E88F2A;
+
+    margin-bottom: 15px;
+}
+
+.no-product h4 {
+
+    color: #fff;
+
+    font-weight: bold;
+}
+
+.no-product p {
+
+    color: #999;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width:700px) {
+
+    .search-wrapper {
+
+        height: 52px;
+    }
+
+    .search-wrapper input {
+
+        font-size: 14px;
+    }
+
+    .search-wrapper button {
+
+        padding: 0 18px;
+    }
+
+}
